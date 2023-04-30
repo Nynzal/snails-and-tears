@@ -24,7 +24,7 @@ public class CardHandDisplay : MonoBehaviour
         }
     }
 
-    private void AddCard(Card card)
+    public void AddCard(Card card)
     {
         GameObject go = Instantiate(_handCardPrefab, transform);
         HandCard handCard = go.GetComponent<HandCard>();

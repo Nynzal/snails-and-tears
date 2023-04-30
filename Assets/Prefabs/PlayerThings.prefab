@@ -97,5 +97,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deck: {fileID: 3091857056831819213}
-  _goods: 64000000640000006e000000
+  _goods: 32000000640000006e000000
+  _maxHandSize: 7
   _orderRange: 2c01000058020000

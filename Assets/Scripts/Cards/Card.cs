@@ -7,9 +7,9 @@ public class Card : ScriptableObject
 {
     public enum Effect
     {
+        COST_G0,
         COST_G1,
         COST_G2,
-        COST_G3,
         TOLL_REDUCTION_FLAT,
         
     }
@@ -21,5 +21,7 @@ public class Card : ScriptableObject
 
     public Effect[] effects;
 
-    public float[] effectValues;
+    public int[] effectValues;
+
+    public int prize;
 }

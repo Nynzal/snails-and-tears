@@ -7,15 +7,18 @@ public class Player : MonoBehaviour
     // Inventory
     [SerializeField] private CardDeck _deck;
     [SerializeField] private int[] _goods;
+    [SerializeField] private int _maxHandSize;
 
     // Objective
     private Goods.Order _finalOrder;
     [SerializeField] private int[] _orderRange;
     
     
-    // Encounter
+    // Encounter Objects
     private Encounter _encounter;
     private CardHandDisplay _cardHandDisplay;
+    // Encounter State
+    private bool _hasEncounterEnded;
 
 
     // Start is called before the first frame update
@@ -34,6 +37,12 @@ public class Player : MonoBehaviour
     public CardDeck GetCardDeck()
     {
         return _deck;
+    }
+
+    public void BuyCard(Card card, Goods.Type costType, int prize)
+    {
+        UpdateGoods(costType, -prize);
+        _deck.AddCardToDeck(card);
     }
     
     
@@ -55,6 +64,12 @@ public class Player : MonoBehaviour
             _goods[i] += change[i];
         }
         
+        EventManager.Instance.OnResourceChange(_goods);
+    }
+
+    public void UpdateGoods(Goods.Type type, int change)
+    {
+        _goods[(int)type] += change;
         EventManager.Instance.OnResourceChange(_goods);
     }
     
@@ -79,6 +94,7 @@ public class Player : MonoBehaviour
     {
         _encounter = encounter;
         _cardHandDisplay = handArea;
+        _hasEncounterEnded = false;
         
         _cardHandDisplay.SetPlayerReference(this);
         _cardHandDisplay.DisplayCards(_deck.DrawOpeningHand(4));
@@ -86,8 +102,100 @@ public class Player : MonoBehaviour
         EventManager.Instance.OnResourceChange(_goods);
     }
 
+    public void SetEncounterOverFlag()
+    {
+        _hasEncounterEnded = true;
+    }
+
+    public void RoundEnd()
+    {
+        DrawCards(1);
+    }
+
+    public void DrawCards(int amount)
+    {
+        while (_deck.GetCurrentHandSize() < _maxHandSize && amount > 0 )
+        {
+            Card card = _deck.DrawCard();
+            if (card != null)
+            {
+                _cardHandDisplay.AddCard(card);
+            }
+            
+            amount--;
+        }
+    }
+
     public bool TryPlayCard(Card card)
     {
+        if (_hasEncounterEnded)
+        {
+            return false;
+        }
+
+        if (!CanPayTheGoodsForCard(card))
+        {
+            return false;
+        }
+
+        if (!_encounter.CanPlayCard(card))
+        {
+            return false;
+        }
+
+        PayCardResources(card);
+        _encounter.PlayCard(card);
+        _deck.DiscardCard(card);
+        
         return true;
+    }
+
+    private bool CanPayTheGoodsForCard(Card card)
+    {
+        for (int i = 0; i < card.effects.Length; i++)
+        {
+            switch (card.effects[i])
+            {
+                case Card.Effect.COST_G0:
+                    if (!HasEnoughGoodsOf((Goods.Type)0, card.effectValues[i]))
+                    {
+                        return false;
+                    }
+                    break;
+                case Card.Effect.COST_G1:
+                    if (!HasEnoughGoodsOf((Goods.Type)1, card.effectValues[i]))
+                    {
+                        return false;
+                    }
+                    break;
+                case Card.Effect.COST_G2:
+                    if (!HasEnoughGoodsOf((Goods.Type)2, card.effectValues[i]))
+                    {
+                        return false;
+                    }
+                    break;
+            }
+        }
+
+        return true;
+    }
+
+    private void PayCardResources(Card card)
+    {
+        for (int i = 0; i < card.effects.Length; i++)
+        {
+            switch (card.effects[i])
+            {
+                case Card.Effect.COST_G0:
+                    UpdateGoods((Goods.Type)0, -card.effectValues[i]);
+                    break;
+                case Card.Effect.COST_G1:
+                    UpdateGoods((Goods.Type)1, -card.effectValues[i]);
+                    break;
+                case Card.Effect.COST_G2:
+                    UpdateGoods((Goods.Type)2, -card.effectValues[i]);
+                    break;
+            }
+        }
     }
 }

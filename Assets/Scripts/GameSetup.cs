@@ -14,7 +14,6 @@ public class GameSetup : MonoBehaviour
 
     public void Embark()
     {
-        SceneManager.UnloadSceneAsync("GameSetup");
         EventManager.Instance.StartNextEncounter();
     }
 }

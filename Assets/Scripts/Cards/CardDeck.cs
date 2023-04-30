@@ -27,6 +27,11 @@ public class CardDeck : MonoBehaviour
         return _allCards;
     }
 
+    public int GetCurrentHandSize()
+    {
+        return _currentHand.Count;
+    }
+
     public void AddCardToDeck(Card card)
     {
         _allCards.Add(card);
@@ -51,7 +56,7 @@ public class CardDeck : MonoBehaviour
         return _currentHand;
     }
 
-    public void DrawCard()
+    public Card DrawCard()
     {
         if (_drawPile.Count == 0)
         {
@@ -59,14 +64,15 @@ public class CardDeck : MonoBehaviour
             _discardPile = new List<Card>();
             if (_drawPile.Count == 0)
             {
-                Debug.Log("TODO draw and discard is empty");
-                return;
+                return null;
             }
         }
         
         int c = Random.Range(0, _drawPile.Count);
-        _currentHand.Add(_drawPile[c]);
+        Card card = _drawPile[c];
+        _currentHand.Add(card);
         _drawPile.RemoveAt(c);
+        return card;
     }
 
     public void DiscardCard(Card card)

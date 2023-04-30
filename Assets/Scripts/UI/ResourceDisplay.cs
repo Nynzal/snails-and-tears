@@ -23,7 +23,7 @@ public class ResourceDisplay : MonoBehaviour
     {
         for (int i = 0; i < resources.Length; i++)
         {
-            _amounts[i].text = "" + resources[i];
+            _amounts[i].text = "" + resources[i] + " " + Goods.Name[i];
         }
     }
 }

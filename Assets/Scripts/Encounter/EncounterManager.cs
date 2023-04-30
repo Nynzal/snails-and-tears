@@ -13,11 +13,15 @@ public class EncounterManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.NextEncounter += OnEmbarkToNextEncounter;
+        EventManager.Instance.ProceedToShop += OnEncounterCompleted;
+        EventManager.Instance.GameOver += OnGameOver;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.NextEncounter -= OnEmbarkToNextEncounter;
+        EventManager.Instance.ProceedToShop -= OnEncounterCompleted;
+        EventManager.Instance.GameOver -= OnGameOver;
     }
 
     // Start is called before the first frame update
@@ -30,6 +34,11 @@ public class EncounterManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public int GetEncountersLeft()
+    {
+        return _encountersUntilEnd;
     }
 
     private void OnEmbarkToNextEncounter()
@@ -46,6 +55,9 @@ public class EncounterManager : MonoBehaviour
 
     private IEnumerator PrepareNextEncounter()
     {
+        // Unload active Scene
+        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        
         // Load Scene Encounter
         AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
 
@@ -58,11 +70,25 @@ public class EncounterManager : MonoBehaviour
         // Prepare values
         FindObjectOfType<Encounter>().InitializeEncounter(
             Random.Range(_tollCostRange[0], _tollCostRange[1]),
+            (Goods.Type)Random.Range(0,3),
             Random.Range(_patienceRange[0], _patienceRange[1]));
+    }
+
+    private void OnEncounterCompleted()
+    {
+        SceneManager.UnloadSceneAsync("Encounter");
+        SceneManager.LoadScene("Shop", LoadSceneMode.Additive);
     }
 
     private void ProceedToFinalOrderDelivery()
     {
-        
+        SceneManager.UnloadSceneAsync("Shop");
+        SceneManager.LoadScene("FinalEncounter", LoadSceneMode.Additive);
+    }
+
+    private void OnGameOver()
+    {
+        SceneManager.UnloadSceneAsync("Encounter");
+        SceneManager.LoadScene("GameOver", LoadSceneMode.Additive);
     }
 }

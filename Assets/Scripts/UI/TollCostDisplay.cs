@@ -20,8 +20,8 @@ public class TollCostDisplay : MonoBehaviour
         EventManager.Instance.UpdateTollCost -= OnTollCostUpdate;
     }
 
-    private void OnTollCostUpdate(int tollCost)
+    private void OnTollCostUpdate(int tollCost, Goods.Type type)
     {
-        _tollCostNumber.text = "" + tollCost;
+        _tollCostNumber.text = "" + tollCost + " " + Goods.Name[(int)type];
     }
 }
