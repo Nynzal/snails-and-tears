@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card : MonoBehaviour
+[CreateAssetMenu(fileName = "Card", menuName = "ScriptableObjects/Card", order = 1)]
+public class Card : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum Effect
     {
+        COST_G1,
+        COST_G2,
+        COST_G3,
+        TOLL_REDUCTION_FLAT,
         
     }
+    
+    public int _cost;
+    public string _name;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string _description;
+
+    public Effect[] effects;
+
+    public float[] effectValues;
 }
