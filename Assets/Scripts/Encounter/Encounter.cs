@@ -97,6 +97,7 @@ public class Encounter : MonoBehaviour
 
     private void CheckForPatienceEnd()
     {
+        EventManager.Instance.OnUpdatePatience(_guardPatience);
         if (_guardPatience <= 0)
         {
             _player.SetEncounterOverFlag();

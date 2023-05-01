@@ -5,10 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class Shop : MonoBehaviour
 {
+    [SerializeField] private int[] _buyAmountRangeHigh;
+    [SerializeField] private int[] _buyAmountRangeLow;
+    [SerializeField] private int[] _sellAmountRange;
+    
     [SerializeField] private Card[] _allPurchasableCards;
     
     [SerializeField] private ShopCardItem[] _shopCardItems;
+    [SerializeField] private ShopGoodsItem[] _shopGoodsItems;
     private ShopObject[] _shopObjects;
+    private GoodsTrade[] _goodsTrades;
 
     private Player _player;
     
@@ -37,7 +43,24 @@ public class Shop : MonoBehaviour
         }
         
         // Goods to trade / buy
-        
+        int l = _shopGoodsItems.Length;
+        _goodsTrades = new GoodsTrade[l];
+        int start = Random.Range(0, 3);
+        for (int i = 0; i < l; i++)
+        {
+            _goodsTrades[i]._trades = Random.Range(1, 4);
+            _goodsTrades[i]._buy = (Goods.Type)((start + i) % 3);
+            _goodsTrades[i]._sell = (Goods.Type)(((start + i) + 3 + 1 -2*Random.Range(0,2))% 3);
+            _goodsTrades[i]._sellAmount = Random.Range(_sellAmountRange[0], _sellAmountRange[1]);
+            _goodsTrades[i]._buyAmount = Random.Range(_buyAmountRangeLow[i], _buyAmountRangeHigh[i]);
+            
+            _shopGoodsItems[i].Initialize(
+                this, 
+                i,
+                "" + _goodsTrades[i]._buyAmount + " " + Goods.Name[(int)_goodsTrades[i]._buy],
+                "" + _goodsTrades[i]._sellAmount + " " + Goods.Name[(int)_goodsTrades[i]._sell],
+                _goodsTrades[i]._trades);
+        }
     }
 
     public bool OnCardBuyButton(int index)
@@ -52,6 +75,19 @@ public class Shop : MonoBehaviour
         return true;
     }
 
+    public bool OnGoodsBuyButton(int index)
+    {
+        if (!_player.HasEnoughGoodsOf(_goodsTrades[index]._sell, _goodsTrades[index]._sellAmount))
+        {
+            return false;
+        }
+        
+        _player.UpdateGoods(_goodsTrades[index]._sell, -_goodsTrades[index]._sellAmount);
+        _player.UpdateGoods(_goodsTrades[index]._buy, _goodsTrades[index]._buyAmount);
+        
+        return true;
+    }
+
     public void Embark()
     {
         EventManager.Instance.StartNextEncounter();
@@ -62,5 +98,14 @@ public class Shop : MonoBehaviour
         public Card card;
         public int prize;
         public Goods.Type costType;
+    }
+
+    private struct GoodsTrade
+    {
+        public int _trades;
+        public Goods.Type _buy;
+        public Goods.Type _sell;
+        public int _buyAmount;
+        public int _sellAmount;
     }
 }

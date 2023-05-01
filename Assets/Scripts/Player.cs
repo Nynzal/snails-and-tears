@@ -87,6 +87,11 @@ public class Player : MonoBehaviour
     {
         return _finalOrder;
     }
+
+    public bool HasEnoughForFinalOrder()
+    {
+        return HasEnoughGoodsOf(_finalOrder._type, _finalOrder._amount);
+    }
     
     
     // ---------------- PLAYING AT ENCOUNTER

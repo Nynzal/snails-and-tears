@@ -47,10 +47,14 @@ public class EncounterManager : MonoBehaviour
         {
             ProceedToFinalOrderDelivery();
         }
+        else
+        {
+            _encountersUntilEnd--;
+            
+            StartCoroutine(PrepareNextEncounter());
+        }
 
-        _encountersUntilEnd--;
-
-        StartCoroutine(PrepareNextEncounter());
+        
     }
 
     private IEnumerator PrepareNextEncounter()
