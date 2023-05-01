@@ -71,6 +71,9 @@ public class Encounter : MonoBehaviour
                     }
                     EventManager.Instance.OnUpdateTollCost(_tollCost, _tollType);
                     break;
+                case Card.Effect.NICE_WORDS:
+                    _guardPatience += card.effectValues[i];
+                    break;
             }
         }
         

@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7caf258c5039bdc4a8ff55ade038b740, type: 3}
-  m_Name: ReferToNotes
+  m_Name: InsultGuard
   m_EditorClassIdentifier: 
-  _cost: 1
-  _name: Refer To Notes
-  _description: Draw 2 cards
-  effects: 
-  effectValues: 
+  _cost: 2
+  _name: Insult
+  _description: You insult that poor fella to gain 4 Tears
+  effects: 05000000
+  effectValues: 04000000
+  prize: 9

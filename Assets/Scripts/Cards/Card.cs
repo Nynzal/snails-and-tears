@@ -11,7 +11,11 @@ public class Card : ScriptableObject
         COST_G1,
         COST_G2,
         TOLL_REDUCTION_FLAT,
-        
+        DRAW_CARDS,
+        GAIN_G0,
+        GAIN_G1,
+        GAIN_G2,
+        NICE_WORDS
     }
     
     public int _cost;

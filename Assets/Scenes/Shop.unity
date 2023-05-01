@@ -1608,7 +1608,11 @@ MonoBehaviour:
   _buyAmountRangeLow: 4b000000280000001c000000
   _sellAmountRange: 1e00000028000000
   _allPurchasableCards:
-  - {fileID: 11400000, guid: e1a3cefa51a3c3547b653b8396551f71, type: 2}
+  - {fileID: 11400000, guid: d7e046db063c817489f73482a1ca8688, type: 2}
+  - {fileID: 11400000, guid: 0096eca719b5af04087778e5e021777e, type: 2}
+  - {fileID: 11400000, guid: 36f055e34a9eb124ab767fbcf1d6c94e, type: 2}
+  - {fileID: 11400000, guid: 73c8f7c2dac5b8343bfd0000cb47fbd0, type: 2}
+  - {fileID: 11400000, guid: b8e42ce82d5273b498e9555ede1f090a, type: 2}
   _shopCardItems:
   - {fileID: 376217957}
   - {fileID: 1173185284}

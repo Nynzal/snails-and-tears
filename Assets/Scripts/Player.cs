@@ -150,6 +150,8 @@ public class Player : MonoBehaviour
 
         PayCardResources(card);
         _encounter.PlayCard(card);
+        ResolveCardEffectForPlayer(card);
+        
         _deck.DiscardCard(card);
         
         return true;
@@ -199,6 +201,28 @@ public class Player : MonoBehaviour
                     break;
                 case Card.Effect.COST_G2:
                     UpdateGoods((Goods.Type)2, -card.effectValues[i]);
+                    break;
+            }
+        }
+    }
+
+    private void ResolveCardEffectForPlayer(Card card)
+    {
+        for (int i = 0; i < card.effects.Length; i++)
+        {
+            switch (card.effects[i])
+            {
+                case Card.Effect.DRAW_CARDS:
+                    DrawCards(card.effectValues[i]);
+                    break;
+                case Card.Effect.GAIN_G0:
+                    UpdateGoods((Goods.Type)0, card.effectValues[i]);
+                    break;
+                case Card.Effect.GAIN_G1:
+                    UpdateGoods((Goods.Type)1, card.effectValues[i]);
+                    break;
+                case Card.Effect.GAIN_G2:
+                    UpdateGoods((Goods.Type)2, card.effectValues[i]);
                     break;
             }
         }
